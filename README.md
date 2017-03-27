@@ -32,3 +32,28 @@ MultiTypePool　：　将不同ViewType的Provider保存在一个SparseArrayComp
 AbsItemProvider : Adapter和ViewHolder的桥梁, 涉及到一些具体业务上的参数或者接口调用,都可以通过此来中转.  
 ViewTypeConstant : 保存不同Adapter的ViewType,每一个Adapter都可以其中新增一个child.  
 ViewHolder : 实现具体的item相关的视图改变,以及数据绑定.   
+
+### Thanks  
+1. sockeqwe / AdapterDelegates  
+https://github.com/sockeqwe/AdapterDelegates  
+2. hongyangAndroid / baseAdapter  
+https://github.com/hongyangAndroid/baseAdapter  
+3. drakeet/MultiType
+https://github.com/drakeet/MultiType  
+
+
+# License
+ Copyright (C) 2016 Amit Shekhar
+   Copyright (C) 2011 Android Open Source Project
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
