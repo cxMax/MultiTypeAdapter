@@ -1,14 +1,15 @@
 package com.cxmax.library;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.util.SparseArrayCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 /**
  * @describe : 1.manage the child {@link AbsItemProvider};
- * 2.provides the same methods to invoke method in {@link AbsItemProvider}
- * to hook {@link android.support.v7.widget.RecyclerView.Adapter}'s lifecycle.
+ *             2.provides the same methods to invoke method in {@link AbsItemProvider}
+ *             to hook {@link android.support.v7.widget.RecyclerView.Adapter}'s lifecycle.
  * @usage :
  * <p>
  * <p>
@@ -29,8 +30,8 @@ public class MultiTypePool<T , VH extends RecyclerView.ViewHolder> implements Ty
             if (viewType == MAX_PROVIDER_VIEW_TYPE) {
                 throw new IllegalArgumentException("there is no more free and unused view type to add");
             }
-            add(viewType, false, provider);
         }
+        add(viewType, false, provider);
     }
 
     @Override
@@ -111,49 +112,43 @@ public class MultiTypePool<T , VH extends RecyclerView.ViewHolder> implements Ty
     @NonNull
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         AbsItemProvider provider = getItemViewProvider(viewType);
-        if (provider == null) {
-            throw new NullPointerException("this viewType AbsItemProvider was not registered =" + viewType);
-        }
+        assertProviderNotNull(provider);
         return provider.onCreateViewHolder(parent);
     }
 
-    public void onBindViewHolder(@NonNull T t, @NonNull RecyclerView.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull T t, @NonNull VH viewHolder, int position) {
         AbsItemProvider provider = getItemViewProvider(viewHolder.getItemViewType());
-        if (provider == null) {
-            throw new NullPointerException("this viewType AbsItemProvider was not registered =" + viewHolder.getItemViewType());
-        }
+        assertProviderNotNull(provider);
         provider.onBindViewHolder(t, position, viewHolder);
     }
 
-    public void onViewRecycled(@NonNull RecyclerView.ViewHolder viewHolder) {
+    public void onViewRecycled(@NonNull VH viewHolder) {
         AbsItemProvider provider = getItemViewProvider(viewHolder.getItemViewType());
-        if (provider == null) {
-            throw new NullPointerException("this viewType AbsItemProvider was not registered =" + viewHolder.getItemViewType());
-        }
+        assertProviderNotNull(provider);
         provider.onViewRecycled(viewHolder);
     }
 
-    public boolean onFailedToRecycleView(@NonNull RecyclerView.ViewHolder viewHolder) {
+    public boolean onFailedToRecycleView(@NonNull VH viewHolder) {
         AbsItemProvider provider = getItemViewProvider(viewHolder.getItemViewType());
-        if (provider == null) {
-            throw new NullPointerException("this viewType AbsItemProvider was not registered =" + viewHolder.getItemViewType());
-        }
+        assertProviderNotNull(provider);
         return provider.onFailedToRecycleView(viewHolder);
     }
 
-    public void onViewAttachedToWindow(@NonNull RecyclerView.ViewHolder viewHolder) {
+    public void onViewAttachedToWindow(@NonNull VH viewHolder) {
         AbsItemProvider provider = getItemViewProvider(viewHolder.getItemViewType());
-        if (provider == null) {
-            throw new NullPointerException("this viewType AbsItemProvider was not registered =" + viewHolder.getItemViewType());
-        }
+        assertProviderNotNull(provider);
         provider.onViewAttachedToWindow(viewHolder);
     }
 
-    public void onViewDetachedFromWindow(@NonNull RecyclerView.ViewHolder viewHolder) {
+    public void onViewDetachedFromWindow(@NonNull VH viewHolder) {
         AbsItemProvider provider = getItemViewProvider(viewHolder.getItemViewType());
-        if (provider == null) {
-            throw new NullPointerException("this viewType AbsItemProvider was not registered =" + viewHolder.getItemViewType());
-        }
+        assertProviderNotNull(provider);
         provider.onViewDetachedFromWindow(viewHolder);
+    }
+
+    private void assertProviderNotNull(@Nullable AbsItemProvider provider) throws NullPointerException {
+        if (provider == null) {
+            throw new NullPointerException("this viewType AbsItemProvider was not registered");
+        }
     }
 }

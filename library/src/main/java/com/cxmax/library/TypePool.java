@@ -4,7 +4,7 @@ import android.support.annotation.NonNull;
 
 /**
  * @describe : control{@link AbsItemProvider} in {@link MultiTypePool}
- * through add()  , remove() , replace() : after consider, i decide to realize it in add()
+ *             through add()  , remove() , replace() : after consideration, i decide to realize it in add()
  * @usage :
  * <p>
  * <p>

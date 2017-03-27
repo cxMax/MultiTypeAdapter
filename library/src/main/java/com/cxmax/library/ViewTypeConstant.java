@@ -1,7 +1,7 @@
 package com.cxmax.library;
 
 /**
- * @describe :
+ * @describe : define view type constant class
  * @usage :
  * <p>
  * <p>
@@ -9,4 +9,12 @@ package com.cxmax.library;
  */
 
 public class ViewTypeConstant {
+
+    //example
+    public interface CouponViewType{
+        public static final int COUPON_LIST_HEADER = 1001;
+        public static final int COUPON_LIST_ITEM = 1002;
+        public static final int COUPON_LIST_MY_ITEM = 1003;
+    }
+
 }
