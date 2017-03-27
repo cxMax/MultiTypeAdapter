@@ -38,11 +38,11 @@ ViewHolder : 实现具体的item相关的视图改变,以及数据绑定.
 https://github.com/sockeqwe/AdapterDelegates  
 2. hongyangAndroid / baseAdapter  
 https://github.com/hongyangAndroid/baseAdapter  
-3. drakeet/MultiType
+3. drakeet/MultiType  
 https://github.com/drakeet/MultiType  
 
 
-# License
+### License
  Copyright (C) 2016 Amit Shekhar
    Copyright (C) 2011 Android Open Source Project
 
