@@ -1,4 +1,4 @@
-## MultiTypeAdapter
+## MultiTypeAdapter 1.0
 
 ### 介绍
 主要是为了简化具有多个ItemType的RecyclerView.Adapter的构建代码,不用在Adapter里面搞一堆ViewType,导致整个Adapter很臃肿.
