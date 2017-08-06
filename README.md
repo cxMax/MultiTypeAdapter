@@ -9,11 +9,13 @@ MultiTypeAdapter主要是为了解决 :  
 [MultiTypeAdapter 1.0](https://github.com/cxMax/MultiTypeAdapter/tree/1.0)
 
 ## 使用
-推荐使用[MultiTypeAdapter 2.0](https://github.com/cxMax/MultiTypeAdapter/tree/2.0)
+推荐使用[MultiTypeAdapter 2.0](https://github.com/cxMax/MultiTypeAdapter/tree/2.0)  
+但我更强烈推荐你去star原作者的项目[MultiType](https://github.com/drakeet/MultiType)   
+因为MultiTypeAdapter 2.0的代码来源于MultiType
 
 ## 申明
 [MultiTypeAdapter 2.0](https://github.com/cxMax/MultiTypeAdapter/tree/2.0)   
-绝大部分代码来自[MultiType 3.x](https://github.com/drakeet/MultiType)
+代码来自[MultiType 3.x](https://github.com/drakeet/MultiType)
 在了解了其设计原理以及代码技巧后,并且在使用过程中根据项目实际的业务需求进行修改.  
 具体描述请看这里[readme](https://github.com/cxMax/MultiTypeAdapter/blob/2.0/README.md)   
 
