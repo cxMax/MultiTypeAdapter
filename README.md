@@ -50,7 +50,7 @@ https://github.com/drakeet/MultiType
 
 
 ### License
-   Copyright (C) cxMax
+   Copyright (C) cxMax  
    Copyright (C) MultiTypeAdapter
 
    Licensed under the Apache License, Version 2.0 (the "License");
