@@ -1,154 +1,81 @@
 package com.cxmax.library;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.util.SparseArrayCompat;
-import android.support.v7.widget.RecyclerView;
-import android.view.ViewGroup;
+
+import com.cxmax.library.binder.ItemViewBinder;
+import com.cxmax.library.linker.Linker;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * @describe : 1.manage the child {@link AbsItemProvider};
- *             2.provides the same methods to invoke method in {@link AbsItemProvider}
- *             to hook {@link android.support.v7.widget.RecyclerView.Adapter}'s lifecycle.
+ * @describe :
  * @usage :
  * <p>
- * <p>
- * Created by cxmax on 2017/3/26.
+ * </p>
+ * Created by caixi on 17-8-6.
  */
 
-public class MultiTypePool<T , VH extends RecyclerView.ViewHolder> implements TypePool<T> {
-    private static final int MAX_PROVIDER_VIEW_TYPE = Integer.MAX_VALUE - 1;
-    @NonNull
-    protected SparseArrayCompat<AbsItemProvider> providers = new SparseArrayCompat<>();
+public class MultiTypePool implements TypePool {
+
+    private @NonNull final List<Class<?>> classes;
+    private @NonNull final List<ItemViewBinder<?, ?>> binders;
+    private @NonNull final List<Linker<?>> linkers;
+
+    public MultiTypePool() {
+        this.classes = new ArrayList<>();
+        this.binders = new ArrayList<>();
+        this.linkers = new ArrayList<>();
+    }
+
+    public MultiTypePool(int capacity) {
+        this.classes = new ArrayList<>(capacity);
+        this.binders = new ArrayList<>(capacity);
+        this.linkers = new ArrayList<>(capacity);
+    }
+
+    public MultiTypePool(@NonNull List<Class<?>> classes, @NonNull List<ItemViewBinder<?, ?>> binders, @NonNull List<Linker<?>> linkers) {
+        this.classes = classes;
+        this.binders = binders;
+        this.linkers = linkers;
+    }
 
     @Override
-    @Deprecated
-    public void add(@NonNull AbsItemProvider provider) {
-        int viewType = providers.size();
-        if (providers.get(viewType) != null) {
-            viewType++;
-            if (viewType == MAX_PROVIDER_VIEW_TYPE) {
-                throw new IllegalArgumentException("there is no more free and unused view type to add");
+    public <T> void register(@NonNull Class<? extends T> clazz, @NonNull ItemViewBinder<T, ?> binder, @NonNull Linker<T> linker) {
+        classes.add(clazz);
+        binders.add(binder);
+        linkers.add(linker);
+    }
+
+    @Override
+    public int firstIndexOf(@NonNull Class<?> clazz) {
+        int index = classes.indexOf(clazz);
+        if (index != -1) {
+            return index;
+        }
+        for (int i = 0; i < classes.size(); i++) {
+            if (classes.get(i).isAssignableFrom(clazz)) {
+                return i;
             }
         }
-        add(viewType, false, provider);
-    }
-
-    @Override
-    public void add(int viewType, @NonNull AbsItemProvider provider) {
-        add(viewType, false, provider);
-    }
-
-    @Override
-    public void add(int viewType, boolean allowReplace, @NonNull AbsItemProvider provider) {
-        if (viewType == MAX_PROVIDER_VIEW_TYPE) {
-            throw new IllegalArgumentException("there is no more free and unused view type to add");
-        }
-        if (!allowReplace && providers.get(viewType) != null) {
-            throw new IllegalArgumentException("An AbsItemProvider was already registered ");
-        }
-        providers.put(viewType, provider);
-    }
-
-    @Override
-    public void remove(@NonNull AbsItemProvider provider) {
-        int index = providers.indexOfValue(provider);
-        if (index >= 0) {
-            providers.removeAt(index);
-        }
-    }
-
-    @Override
-    public void remove(int viewType) {
-        int index = providers.indexOfKey(viewType);
-        if (index >= 0) {
-            providers.remove(viewType);
-        }
-    }
-
-    @Override
-    public int getItemViewType(T t, int position) {
-        int delegatesCount = providers.size();
-        for (int i = 0; i < delegatesCount; i++) {
-            AbsItemProvider provider = providers.valueAt(i);
-            if (provider.isForViewType(t, position)) {
-                return providers.keyAt(i);
-            }
-        }
-        throw new IllegalArgumentException("No AbsItemProvider added that matches position =" + position);
-    }
-
-    @Override
-    public int getItemViewType(AbsItemProvider provider) {
-        return providers.indexOfValue(provider);
-    }
-
-    @Override
-    public AbsItemProvider getItemViewProvider(T t, int position) {
-        int delegatesCount = providers.size();
-        for (int i = 0; i < delegatesCount; i++) {
-            AbsItemProvider provider = providers.valueAt(i);
-            if (provider.isForViewType(t, position)) {
-                return providers.valueAt(i);
-            }
-        }
-        throw new IllegalArgumentException(
-                "No AbsItemProvider added that matches position =" + position);
-    }
-
-    @Override
-    public AbsItemProvider getItemViewProvider(int viewType) {
-        AbsItemProvider provider = providers.get(viewType);
-        if (provider == null) {
-            throw new IllegalArgumentException("No AbsItemProvider added that matches viewType =" + viewType);
-        }
-        return provider;
-    }
-
-    public int getProviderCount() {
-        return providers.size();
+        return -1;
     }
 
     @NonNull
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        AbsItemProvider provider = getItemViewProvider(viewType);
-        assertProviderNotNull(provider);
-        return provider.onCreateViewHolder(parent);
+    @Override
+    public List<Class<?>> getClasses() {
+        return classes;
     }
 
-    public void onBindViewHolder(@NonNull T t, @NonNull VH viewHolder, int position) {
-        AbsItemProvider provider = getItemViewProvider(viewHolder.getItemViewType());
-        assertProviderNotNull(provider);
-        provider.onBindViewHolder(t, position, viewHolder);
+    @NonNull
+    @Override
+    public List<ItemViewBinder<?, ?>> getItemViewBinders() {
+        return binders;
     }
 
-    public void onViewRecycled(@NonNull VH viewHolder) {
-        AbsItemProvider provider = getItemViewProvider(viewHolder.getItemViewType());
-        assertProviderNotNull(provider);
-        provider.onViewRecycled(viewHolder);
-    }
-
-    public boolean onFailedToRecycleView(@NonNull VH viewHolder) {
-        AbsItemProvider provider = getItemViewProvider(viewHolder.getItemViewType());
-        assertProviderNotNull(provider);
-        return provider.onFailedToRecycleView(viewHolder);
-    }
-
-    public void onViewAttachedToWindow(@NonNull VH viewHolder) {
-        AbsItemProvider provider = getItemViewProvider(viewHolder.getItemViewType());
-        assertProviderNotNull(provider);
-        provider.onViewAttachedToWindow(viewHolder);
-    }
-
-    public void onViewDetachedFromWindow(@NonNull VH viewHolder) {
-        AbsItemProvider provider = getItemViewProvider(viewHolder.getItemViewType());
-        assertProviderNotNull(provider);
-        provider.onViewDetachedFromWindow(viewHolder);
-    }
-
-    private void assertProviderNotNull(@Nullable AbsItemProvider provider) throws NullPointerException {
-        if (provider == null) {
-            throw new NullPointerException("this viewType AbsItemProvider was not registered");
-        }
+    @NonNull
+    @Override
+    public List<Linker<?>> getLinkers() {
+        return linkers;
     }
 }

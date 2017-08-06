@@ -1,4 +1,4 @@
-package com.cxmax.library.util;
+package com.cxmax.library.utils;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -17,9 +17,9 @@ import java.util.Collection;
  * Created by cxmax on 2017/3/27.
  */
 
-public class Preconditions {
+public class Asserts {
 
-    private Preconditions() {
+    private Asserts() {
 
     }
 

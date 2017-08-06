@@ -2,69 +2,29 @@ package com.cxmax.library;
 
 import android.support.annotation.NonNull;
 
+import com.cxmax.library.binder.ItemViewBinder;
+import com.cxmax.library.linker.Linker;
+
+import java.util.List;
+
 /**
- * @describe : control{@link AbsItemProvider} in {@link MultiTypePool}
- *             through add()  , remove() , replace() : after consideration, i decide to realize it in add()
+ * @describe :
  * @usage :
  * <p>
- * <p>
- * Created by cxmax on 2017/3/26.
+ * </p>
+ * Created by caixi on 17-8-6.
  */
 
-public interface TypePool<T> {
+public interface TypePool {
 
-    /**
-     * if you don't specify an item view type when you add a new {@link AbsItemProvider}, it will be automatic.
-     * for better source code management,i strong recommend to use a specific view type when provider is added
-     *
-     * @param provider
-     */
-    @Deprecated
-    void add(@NonNull AbsItemProvider provider);
+    <T> void register(@NonNull Class<? extends T> clazz, @NonNull ItemViewBinder<T, ?> binder, @NonNull Linker<T> linker);
 
-    /**
-     * specify a view type , when {@link AbsItemProvider} be added
-     * you can define an specific view type in {@link ViewTypeConstant}
-     *
-     * @param viewType
-     * @param provider
-     */
-    void add(int viewType, @NonNull AbsItemProvider provider);
+    int firstIndexOf(@NonNull Class<?> clazz);
 
-    /**
-     * replace();
-     * @param viewType
-     * @param allowReplace
-     * @param provider
-     */
-    void add(int viewType, boolean allowReplace, @NonNull AbsItemProvider provider);
+    @NonNull List<Class<?>> getClasses();
 
-    /**
-     * remove a specific {@link AbsItemProvider} from {@link MultiTypePool}
-     *
-     * @param provider
-     */
-    void remove(@NonNull AbsItemProvider provider);
+    @NonNull List<ItemViewBinder<?, ?>> getItemViewBinders();
 
-    /**
-     * remove a specific {@link AbsItemProvider} from {@link MultiTypePool} via view type param
-     *
-     * @param viewType
-     */
-    void remove(int viewType);
+    @NonNull List<Linker<?>> getLinkers();
 
-    /**
-     * the result will be used in {@link android.support.v7.widget.RecyclerView.Adapter}
-     *
-     * @param item
-     * @param position
-     * @return
-     */
-    int getItemViewType(@NonNull T item, int position);
-
-    int getItemViewType(@NonNull AbsItemProvider provider);
-
-    AbsItemProvider getItemViewProvider(T item, int position);
-
-    AbsItemProvider getItemViewProvider(int viewType);
 }
