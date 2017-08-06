@@ -1,7 +1,14 @@
 ## MultiTypeAdapter
 
 ### 介绍
-主要是为了简化具有多个ItemType的RecyclerView.Adapter的构建代码,不用在Adapter里面搞来搞去,导致整个Adapter很臃肿.
+主要是为了简化具有多个ItemType的RecyclerView.Adapter的构建代码,不用在Adapter里面搞一堆ViewType,导致整个Adapter很臃肿.
+
+### 缺点
+现有代码的缺点 :   
+* 仅因为Data<T> 而去继承MultiTypeAdapter, 假如adapter拥有多类型的数据,会导致类臃肿与继承层级变深,不利于后期维护.
+* 保持RecyclerView.Adapter原有ViewType去注册ViewHolder, 但未体现面向对象的设计思想. 可以优化为data -> viewholder 的绑定
+* 对于相同数据体(data)对应多个ViewHolder代码不够简洁, 需要多次注册, 无法实现一次性注册
+* MultiTypeAdapter的设计过度依赖于继承实现, 可以完全保持其独立性, 并且很纯净, 不会去实现多余的接口方法, 避免在拓展MultiTypeAdapter的其他模块出现冲突, 例如 : header/footer以及load more,refresh,pinned header. 
 
 ### 使用方式
 跟Popup一样,这个的使用也只需要关心五个步骤:
@@ -22,7 +29,7 @@
                         当然,对应具体的业务或者参数需要传递到viewholder,可以重写onCreateViewHolder()或onBindViewHolder(),具体参考GameCouponPinnedAdapter
 5. 最后在Activity或者Fragment中调用RecyclerView.setAdapter即可.
 
-### 关于ReyclerView常用到的header/footer以及loadmore,refresh,pinned header等
+### 关于RecyclerView常用到的header/footer以及load more,refresh,pinned header等
 1. 考虑到MultiTypeAdapter主要是为了简化多个ItemType构建,额外的header和footer可以通过Decorator来辅助实现,而不需要在现有的MultiTypeAdapter中进行增加ViewType
 2. 以上的功能均可以通过一个单独的component来实现,具体参考MzRecyclerView
 
@@ -43,8 +50,8 @@ https://github.com/drakeet/MultiType
 
 
 ### License
- Copyright (C) 2016 Amit Shekhar
-   Copyright (C) 2011 Android Open Source Project
+   Copyright (C) cxMax
+   Copyright (C) MultiTypeAdapter
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
